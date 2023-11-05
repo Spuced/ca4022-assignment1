@@ -1,6 +1,6 @@
 # CA4022-Assignment 1: Data Analysis with Pig and Hive
 
-This repository contains code and folder structure for analysing job posting data from [Kaggle](https://www.kaggle.com/datasets/shivamb/real-or-fake-fake-jobposting-prediction) using Pig and Hive.
+This repository contains the code and folder structure for analysing job posting data from [Kaggle](https://www.kaggle.com/datasets/shivamb/real-or-fake-fake-jobposting-prediction) with Pig and Hive.
 
 ### Repository Structure:
 
