@@ -39,12 +39,14 @@ LIMIT 10;
 -- Complex Queries
 
 -- Q3 Word count of descriptions
+-- Remove the -- on the next row to save the output as a CSV
+--INSERT OVERWRITE LOCAL DIRECTORY '/home/eddie/Documents/ca4022/assignment_1/ca4022-assignment1/output/description_wordcounts' ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
 SELECT LOWER(word), COUNT(*) as word_count
 FROM job_listings
 LATERAL VIEW explode(SPLIT(description, ' ')) wordTable as word
 WHERE description IS NOT NULL AND description != ''
 GROUP BY LOWER(word)
-ORDER BY word_count DESC;
+ORDER BY word_count DESC; 
 
 -- Q4 Show the percentage of fradulent jobs by country with full country details
 
@@ -58,6 +60,8 @@ LOAD DATA LOCAL INPATH '/home/eddie/Documents/ca4022/assignment_1/ca4022-assignm
 OVERWRITE INTO TABLE country_codes;
 
 -- Import the country codes
+-- Remove the -- on the next row to save the output as a CSV
+--INSERT OVERWRITE LOCAL DIRECTORY '/home/eddie/Documents/ca4022/assignment_1/ca4022-assignment1/output/fraudulent_countries' ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
 SELECT jl.country, MAX(cc.country_name),MAX(cc.sub_region), MAX(cc.region), COUNT(jl.job_id) AS total_jobs, (SUM(jl.fraudulent) / COUNT(jl.job_id) * 100) AS percentage_fraudulent
 FROM job_listings jl
 JOIN country_codes cc
