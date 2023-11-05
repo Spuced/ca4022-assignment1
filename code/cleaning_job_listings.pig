@@ -91,6 +91,5 @@ clean_job_listings = FOREACH combined_job_listings GENERATE
     extract_country::function AS function,
     extract_country::fraudulent AS fraudulent;
 
-/* Store the data with the headers
-As Hive cannot distinguish quoted commas the output is saved as a tsv*/
+-- Store the data with the headers
 STORE clean_job_listings INTO '../output/clean_job_listings' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'NO_MULTILINE', 'UNIX', 'WRITE_OUTPUT_HEADER');
