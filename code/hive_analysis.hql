@@ -39,8 +39,8 @@ LIMIT 10;
 -- Complex Queries
 
 -- Q3 Word count of descriptions
--- Remove the -- on the next row to save the output as a CSV
---INSERT OVERWRITE LOCAL DIRECTORY '/home/eddie/Documents/ca4022/assignment_1/ca4022-assignment1/output/description_wordcounts' ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+-- Remove the -- on the next row to save the output as a TSV
+--INSERT OVERWRITE LOCAL DIRECTORY '/home/eddie/Documents/ca4022/assignment_1/ca4022-assignment1/output/description_wordcounts' ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'
 SELECT LOWER(word), COUNT(*) as word_count
 FROM job_listings
 LATERAL VIEW explode(SPLIT(description, ' ')) wordTable as word
