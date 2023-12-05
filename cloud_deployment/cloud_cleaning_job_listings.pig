@@ -1,5 +1,4 @@
 -- This version of the script works in MapReduce mode
-
 -- Load in the job listings dataset
 --job_listings = LOAD 'data/fake_job_postings.csv' USING PigStorage(',') AS (job_id:int, title:chararray, location:chararray, department:chararray, salary_range:chararray, company_profile:chararray, description:chararray, requirements:chararray, benefits:chararray, telecommuting:int, has_company_logo:int, has_questions:int, employment_type:chararray, required_experience:chararray, required_education:chararray, industry:chararray, function:chararray, fraudulent:int);
 
@@ -10,12 +9,12 @@
 --check_column = FOREACH job_listings Generate [field];
 
 -- Delete the output folder so the script can run
-fs -rm -r -f ../output/clean_job_listings;
+fs -rm -r -f gs://ca4022/output/clean_job_listings;
 
 -- Commas in quotes were causing problems and the headers were loaded as the first tuple
 
 -- Load the csv with quoted commas and without headers
-job_listings = LOAD './data/fake_job_postings.csv' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'NO_MULTILINE', 'UNIX', 'SKIP_INPUT_HEADER') AS (
+job_listings = LOAD 'gs://ca4022/data/fake_job_postings.csv' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'NO_MULTILINE', 'UNIX', 'SKIP_INPUT_HEADER') AS (
 	job_id:int,
 	title:chararray,
 	location:chararray,
@@ -94,4 +93,4 @@ clean_job_listings = FOREACH combined_job_listings GENERATE
     extract_country::fraudulent AS fraudulent;
 
 -- Store the data with the headers
-STORE clean_job_listings INTO './output/clean_job_listings' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'NO_MULTILINE', 'UNIX', 'WRITE_OUTPUT_HEADER');
+STORE clean_job_listings INTO 'gs://ca4022/output/clean_job_listings' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'NO_MULTILINE', 'UNIX', 'WRITE_OUTPUT_HEADER');

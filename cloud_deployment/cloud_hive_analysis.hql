@@ -9,8 +9,8 @@ CREATE EXTERNAL TABLE IF NOT EXISTS job_listings (job_id INT, title STRING, loca
 ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
 TBLPROPERTIES('skip.header.line.count'='1');
 
--- Overwrite the CSV into the table using the **local** file path
-LOAD DATA LOCAL INPATH '/home/eddie/Documents/ca4022/assignment_1/ca4022-assignment1/output/clean_job_listings/part-r-00000'
+-- Overwrite the CSV into the table using the cloud storage file path
+LOAD DATA INPATH 'gs://ca4022/output/clean_job_listings/part-r-00000'
 OVERWRITE INTO TABLE job_listings;
 
 -- Show the entire table
@@ -40,7 +40,7 @@ LIMIT 10;
 
 -- Q3 Word count of descriptions
 -- Remove the -- on the next row to save the output as a TSV
---INSERT OVERWRITE LOCAL DIRECTORY '/home/eddie/Documents/ca4022/assignment_1/ca4022-assignment1/output/description_wordcounts' ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'
+--INSERT OVERWRITE DIRECTORY 'gs://output/description_wordcounts' ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'
 SELECT LOWER(word), COUNT(*) as word_count
 FROM job_listings
 LATERAL VIEW explode(SPLIT(description, ' ')) wordTable as word
@@ -56,12 +56,12 @@ ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
 TBLPROPERTIES('skip.header.line.count'='1');
 
 -- Overwrite with CSV data using the local file patj
-LOAD DATA LOCAL INPATH '/home/eddie/Documents/ca4022/assignment_1/ca4022-assignment1/data/country_codes.csv'
+LOAD DATA INPATH 'gs://ca4022/data/country_codes.csv'
 OVERWRITE INTO TABLE country_codes;
 
 -- Import the country codes
 -- Remove the -- on the next row to save the output as a CSV
---INSERT OVERWRITE LOCAL DIRECTORY '/home/eddie/Documents/ca4022/assignment_1/ca4022-assignment1/output/fraudulent_countries' ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+--INSERT OVERWRITE DIRECTORY 'gs://	/output/fraudulent_countries' ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
 SELECT jl.country, MAX(cc.country_name),MAX(cc.sub_region), MAX(cc.region), COUNT(jl.job_id) AS total_jobs, (SUM(jl.fraudulent) / COUNT(jl.job_id) * 100) AS percentage_fraudulent
 FROM job_listings jl
 JOIN country_codes cc

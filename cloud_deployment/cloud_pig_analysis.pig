@@ -1,5 +1,5 @@
 -- Load the CSV
-job_listings = LOAD './output/clean_job_listings/part-r-00000' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'NO_MULTILINE', 'UNIX', 'SKIP_INPUT_HEADER') AS (
+job_listings = LOAD 'gs://ca4022/output/clean_job_listings/part-r-00000' USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'NO_MULTILINE', 'UNIX', 'SKIP_INPUT_HEADER') AS (
 	job_id:int,
 	title:chararray,
 	location:chararray,

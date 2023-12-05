@@ -1,9 +1,13 @@
 # Cloud Deployment Subfolder
 
-This subfolder contains modified versions of the pig script that can be run with the mapreduce framework.
+This subfolder contains modified versions of the pig script that can be deployed on the cloud with the mapreduce framework.
 
-- **hdfs_setup.sh:** Once the hadoop nodes are running, execute this script to create the required folders and upload the input files to the hdfs: `$ ./hdfs_setup.sh`
+To run these files on Google DataProc create a **data** and **output** folder within a Google Cloud Storage Bucket.
 
-- **pseudo_cleaning_job_listings.pig:** Use this script to clean the job listing file. Ensure the CSV files are placed in the data folder before running. Execute the script using the following command: `$ pig -x mapreduce pseudo_cleaning_job_listings.pig`
+Add the fake_job_postings and country_code CSVs to this bucket then initiate the cluster.
 
-- **pseudo_pig_analysis.pig:** This script replicates the two simple Hive queries. Run it using `$ pig -x mapreduce pig_analysis.pig`.
+- **cloud_cleaning_job_listings.pig:** Use this script to clean the job listing file. Execute the script using the following command: `$ gcloud dataproc jobs submit pig --cluster=assignment1 --region=europe-west4 --file=cloud_cleaning_job_listings.pig`
+
+- **cloud_hive_analysis.hql:** This script runs the hive queries. Execute after the cleaning script using: `gcloud dataproc jobs submit hive --cluster=assignment1 --region=europe-west4 --file=cloud_hive_analysis.hql`
+
+- **cloud_pig_analysis.pig:** This script replicates the two simple Hive queries. Run it using `gcloud dataproc jobs submit pig --cluster=assignment1 --region=europe-west4 --file=cloud_pig_analysis.pig`.
